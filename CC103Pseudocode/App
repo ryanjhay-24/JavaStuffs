@@ -1,0 +1,81 @@
+DISPLAY "----- USER DASHBOARD -----"  
+DISPLAY "1. Set or Update Income and Budget"  
+DISPLAY "2. Add Expense"  
+DISPLAY "3. View Financial Summary"  
+DISPLAY "4. Logout"  
+INPUT userChoice  
+
+IF userChoice = 1 THEN  
+
+    DISPLAY "Enter total income:"  
+    INPUT totalIncome  
+
+    DISPLAY "Enter weekly budget:"  
+    INPUT weeklyBudget  
+
+    DISPLAY "Enter daily allowance:"  
+    INPUT dailyAllowance  
+
+    UPDATE Users table  
+    SET income = totalIncome,  
+        weekly_budget = weeklyBudget,  
+        daily_allowance = dailyAllowance  
+    WHERE user_id = currentUserID  
+
+ELSE IF userChoice = 2 THEN  
+
+    DISPLAY "Enter expense description:"  
+    INPUT expenseDescription  
+
+    DISPLAY "Enter expense amount:"  
+    INPUT expenseAmount  
+
+    DISPLAY "Enter expense date:"  
+    INPUT expenseDate  
+
+    INSERT INTO Expenses table  
+    VALUES currentUserID, expenseDescription, expenseAmount, expenseDate  
+
+    DISPLAY "Expense saved."  
+
+ELSE IF userChoice = 3 THEN  
+
+    SELECT SUM(amount) FROM Expenses  
+    WHERE user_id = currentUserID  
+    STORE result in totalExpenses  
+
+    SELECT income, weekly_budget, daily_allowance  
+    FROM Users  
+    WHERE user_id = currentUserID  
+    STORE values  
+
+    SET currentBalance = income - totalExpenses  
+
+    DISPLAY "----- FINANCIAL SUMMARY -----"  
+    DISPLAY "Total Income: ", income  
+    DISPLAY "Total Expenses: ", totalExpenses  
+    DISPLAY "Current Balance: ", currentBalance  
+
+    IF totalExpenses > weekly_budget THEN  
+        DISPLAY "Alert: Weekly budget exceeded."  
+    ENDIF  
+
+    DISPLAY "----- PURCHASE HISTORY -----"  
+
+    SELECT description, amount, date  
+    FROM Expenses  
+    WHERE user_id = currentUserID  
+
+    FOR each record returned  
+        DISPLAY description  
+        DISPLAY amount  
+        DISPLAY date  
+        DISPLAY "---------------------"  
+    ENDFOR  
+
+ELSE IF userChoice = 4 THEN  
+    DISPLAY "Logging out."  
+
+ELSE  
+    DISPLAY "Invalid choice."  
+ENDIF  

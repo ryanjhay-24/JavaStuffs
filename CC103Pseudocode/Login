@@ -1,0 +1,47 @@
+DISPLAY "----- MAIN MENU -----"  
+DISPLAY "1. Register"  
+DISPLAY "2. Login"  
+DISPLAY "3. Exit"  
+INPUT mainChoice  
+
+IF mainChoice = 1 THEN  
+
+    DISPLAY "Enter username:"  
+    INPUT username  
+
+    DISPLAY "Enter password:"  
+    INPUT password  
+
+    IF username does not exist in Users table THEN  
+        INSERT username and password into Users table  
+        DISPLAY "Registration successful."  
+    ELSE  
+        DISPLAY "Username already exists."  
+    ENDIF  
+
+ELSE IF mainChoice = 2 THEN  
+
+    DISPLAY "Enter username:"  
+    INPUT username  
+
+    DISPLAY "Enter password:"  
+    INPUT password  
+
+    SELECT user FROM Users  
+    WHERE username = input username  
+    AND password = input password  
+
+    IF user exists THEN  
+        SET currentUserID = user.user_id  
+        DISPLAY "Login successful."  
+        CALL UserDashboard(currentUserID)  
+    ELSE  
+        DISPLAY "Invalid username or password."  
+    ENDIF  
+
+ELSE IF mainChoice = 3 THEN  
+    DISPLAY "Exiting program."  
+
+ELSE  
+    DISPLAY "Invalid choice."  
+ENDIF  
